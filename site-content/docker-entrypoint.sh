@@ -345,7 +345,9 @@ run_preview_mode() {
   live-server --port=5151 --host=0.0.0.0 --no-browser --no-css-inject --wait=2000 &
   popd > /dev/null
 
-  find "${find_paths}" -type f | entr /bin/bash -c "${on_change_functions}"
+  # -n keeps entr out of interactive mode; run.sh does not allocate a TTY, so
+  # without it entr aborts with "unable to get terminal attributes"
+  find "${find_paths}" -type f | entr -n /bin/bash -c "${on_change_functions}"
 }
 
 
